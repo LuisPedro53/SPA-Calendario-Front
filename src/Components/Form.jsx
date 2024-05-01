@@ -1,154 +1,177 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormContainer, InputArea, Input, Label, Button } from "../Styles/Form";
 import { toast } from "react-toastify";
 import axios from "axios";
 import InputMask from "react-input-mask";
 
 const Form = ({ editingUser, setEditingUser, fetchUsers }) => {
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [cdAluno, setCdAluno] = useState("");
+  const [titulo, setTitulo] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [data, setData] = useState("");
+  const [hora, setHora] = useState("");
+  const [tempo, setTempo] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-
-  const handleSearch = () => {
-    const cpfNumeros = cpf.replace(/\D/g, "").trim();
-    fetchUsers(nome.trim(), cpfNumeros, email.trim());
-  };
 
   useEffect(() => {
     if (editingUser) {
-      setNome(editingUser.nmAluno);
-      setEmail(editingUser.emailAluno);
-      setCpf(editingUser.cpfAluno);
-      setCdAluno(editingUser.cdAluno);
+      setTitulo(editingUser.nmTitulo);
+      setDescricao(editingUser.nmDescricao);
+      setData(editingUser.dtTarefa);
+      setHora(editingUser.horaTarefa);
+      setTempo(editingUser.tempoTarefa);
       setIsEditing(true);
     } else {
       setIsEditing(false);
     }
   }, [editingUser]);
 
-  const handleCreate = async (aluno) => {
+  const handleCreate = async (tarefa) => {
     try {
       const response = await axios.post("http://localhost:8080/graphql", {
         query: `
-        mutation CreateAluno($nmAluno: String!, $cpfAluno: String!, $emailAluno: String!) {
-          createAluno(nmAluno: $nmAluno, cpfAluno: $cpfAluno, emailAluno: $emailAluno) {
-            nmAluno
-            cpfAluno
-            emailAluno
+          mutation CreateTarefa($nmTitulo: String!, $nmDescricao: String!, $dtTarefa: Date!, $horaTarefa: Time!, $tempoTarefa: Int!) {
+          createTarefa(nmTitulo: $nmTitulo, nmDescricao: $nmDescricao, dtTarefa: $dtTarefa, horaTarefa: $horaTarefa, tempoTarefa: $tempoTarefa) {
+            nmTitulo
+            nmDescricao
+            dtTarefa
+            horaTarefa
+            tempoTarefa
           }
-        }
-      `,
-        variables: aluno,
+            }
+
+        `,
+        variables: tarefa,
       });
 
-      toast.success("Aluno criado com sucesso!");
-      fetchUsers();
+      toast.success("Tarefa criada com sucesso!");
+      // fetchUsers();
     } catch (error) {
-      console.error("Erro ao criar aluno:", error);
-      toast.error("Erro ao criar aluno!");
+      console.error("Erro ao criar tarefa:", error);
+      toast.error("Erro ao criar tarefa!");
     }
   };
 
-  const handleUpdate = async (aluno) => {
+  const handleUpdate = async (tarefa) => {
     try {
       const response = await axios.post("http://localhost:8080/graphql", {
         query: `
-        mutation UpdateAluno($cdAluno: String!, $nmAluno: String, $cpfAluno: String, $emailAluno: String) {
-          updateAluno(cdAluno: $cdAluno, nmAluno: $nmAluno, cpfAluno: $cpfAluno, emailAluno: $emailAluno) {
-            cdAluno
-            nmAluno
-            cpfAluno
-            emailAluno
+          mutation UpdateTarefa($cdTarefa: String!, $nmTitulo: String, $nmDescricao: String, $dtTarefa: Date, $horaTarefa: Time, $tempoTarefa: Int) {
+            updateTarefa(cdTarefa: $cdTarefa, nmTitulo: $nmTitulo, nmDescricao: $nmDescricao, dtTarefa: $dtTarefa, horaTarefa: $horaTarefa, tempoTarefa: $tempoTarefa) {
+              cdTarefa
+              nmTitulo
+              nmDescricao
+              dtTarefa
+              horaTarefa
+              tempoTarefa
+            }
           }
-        }
-      `,
-        variables: aluno,
+        `,
+        variables: tarefa,
       });
 
-      toast.success("Aluno atualizado com sucesso!");
+      toast.success("Tarefa atualizada com sucesso!");
       fetchUsers();
     } catch (error) {
-      console.error("Erro ao atualizar aluno:", error);
-      toast.error("Erro ao atualizar aluno!");
+      console.error("Erro ao atualizar tarefa:", error);
+      toast.error("Erro ao atualizar tarefa!");
     }
+  };
+
+  const handleSearch = () => {
+    fetchUsers(titulo.trim(), descricao.trim(), data, hora, tempo);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const cpfNumeros = cpf.replace(/\D/g, "").trim();
-
-    const aluno = {
-      nmAluno: nome.trim(),
-      cpfAluno: cpfNumeros,
-      emailAluno: email.trim(),
+    const tarefa = {
+      nmTitulo: titulo.trim(),
+      nmDescricao: descricao.trim(),
+      dtTarefa: data,
+      horaTarefa: hora + ":00.000Z",
+      tempoTarefa: parseInt(tempo),
     };
 
-    if (!nome || !email || !cpf) {
+    if (!titulo || !descricao || !data || !hora || !tempo) {
       return toast.warn("Preencha todos os campos");
     }
 
-    console.log(cpfNumeros.length);
-    if (cpfNumeros.length !== 11) {
-      return toast.warn("CPF inválido");
-    }
-
     if (isEditing) {
-      aluno.cdAluno = editingUser.cdAluno;
-      handleUpdate(aluno);
+      tarefa.cdTarefa = editingUser.cdTarefa;
+      handleUpdate(tarefa);
     } else {
-      handleCreate(aluno);
+      handleCreate(tarefa);
     }
 
-    setNome("");
-    setEmail("");
-    setCpf("");
-    setCdAluno("");
+    setTitulo("");
+    setDescricao("");
+    setData("");
+    setHora("");
+    setTempo("");
     setIsEditing(false);
   };
 
   return (
     <FormContainer onSubmit={handleSubmit}>
       <InputArea>
-        <Label htmlFor="nome-input">Nome</Label>
+        <Label htmlFor="titulo-input">Título</Label>
         <Input
-          id="nome-input"
-          name="nmAluno"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
+          id="titulo-input"
+          name="nmTitulo"
+          value={titulo}
+          onChange={(e) => setTitulo(e.target.value)}
         />
       </InputArea>
 
       <InputArea>
-        <Label htmlFor="email-input">E-mail</Label>
+        <Label htmlFor="descricao-input">Descrição</Label>
         <Input
-          id="email-input"
-          name="emailAluno"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          id="descricao-input"
+          name="nmDescricao"
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
         />
       </InputArea>
 
       <InputArea>
-        <Label htmlFor="cpf-input">CPF</Label>
-        <InputMask
-          mask="999.999.999-99"
-          value={cpf}
-          onChange={(e) => setCpf(e.target.value)}
-          id="cpf-input"
-          data-testid="cpf-input"
-        >
-          {(inputProps) => <Input {...inputProps} />}
-        </InputMask>
+        <Label htmlFor="data-input">Data</Label>
+        <Input
+          id="data-input"
+          name="dtTarefa"
+          type="date"
+          value={data}
+          onChange={(e) => setData(e.target.value)}
+        />
       </InputArea>
 
-      <Button type="submit">SALVAR</Button>
-      <Button type="button" onClick={handleSearch}>
-        PESQUISAR
-      </Button>
+      <InputArea>
+        <Label htmlFor="hora-input">Hora</Label>
+        <Input
+          id="hora-input"
+          name="horaTarefa"
+          type="time"
+          value={hora}
+          onChange={(e) => setHora(e.target.value)}
+        />
+      </InputArea>
+
+      <InputArea>
+        <Label htmlFor="tempo-input">Tempo (minutos)</Label>
+        <Input
+          id="tempo-input"
+          name="tempoTarefa"
+          type="number"
+          value={tempo}
+          onChange={(e) => setTempo(e.target.value)}
+        />
+      </InputArea>
+
+      <Button type="submit">{isEditing ? "ATUALIZAR" : "SALVAR"}</Button>
+      {!isEditing && (
+        <Button type="button" onClick={handleSearch}>
+          PESQUISAR
+        </Button>
+      )}
     </FormContainer>
   );
 };
