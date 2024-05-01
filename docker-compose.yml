@@ -1,0 +1,6 @@
+version: "3"
+services:
+  educadata-front:
+    build: .
+    ports:
+      - "8083:80"
