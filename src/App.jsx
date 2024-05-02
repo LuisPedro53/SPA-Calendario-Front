@@ -1,35 +1,52 @@
-import GlobalStyle from "./Styles/global.js";
-import Form from "./Components/Form.jsx";
-import Grid from "./Components/Grid.jsx";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Container, Title } from "./Styles/App";
+import Form from "./Components/Form";
+import Grid from "./Components/Grid";
+import SearchForm from "./Components/SearchForm";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { Container, Title } from "./Styles/App.js";
+import GlobalStyle from "./Styles/global";
 
 function App() {
   const [tarefas, setTarefas] = useState([]);
   const [editingTarefa, setEditingTarefa] = useState(null);
 
-  const fetchTarefas = async (nmTitulo = null) => {
+  const fetchTarefas = async (
+    nmTitulo = null,
+    dataInicial = null,
+    dataFinal = null
+  ) => {
     try {
-      const response = await axios.post("http://localhost:8080/graphql", {
-        query: `
-        query GetTarefas($nmTitulo: String) {
-          tarefas(nmTitulo: $nmTitulo) {
-            cdTarefa
-            nmTitulo
-            nmDescricao
-            dtTarefa
-            horaTarefa
-            tempoTarefa
-          }
-          }
-      `,
-        variables: {
-          nmTitulo,
-        },
-      });
+      const query = `
+      query GetTarefas($nmTitulo: String, $dataInicial: Date, $dataFinal: Date) {
+        tarefas(nmTitulo: $nmTitulo, dataInicial: $dataInicial, dataFinal: $dataFinal) {
+          cdTarefa
+          nmTitulo
+          nmDescricao
+          dtTarefa
+          horaTarefa
+          tempoTarefa
+        }
+      }
+    `;
+
+      const variables = {
+        nmTitulo,
+        dataInicial,
+        dataFinal,
+      };
+
+      const requestBody = {
+        query,
+        variables,
+      };
+
+      const response = await axios.post(
+        "http://localhost:8080/graphql",
+        requestBody
+      );
+
       setTarefas(response.data.data.tarefas);
     } catch (error) {
       toast.error("Erro ao carregar as tarefas");
@@ -49,6 +66,7 @@ function App() {
           setEditingTarefa={setEditingTarefa}
           fetchTarefas={fetchTarefas}
         />
+        <SearchForm fetchTarefas={fetchTarefas} />
         <Grid
           tarefas={tarefas}
           setTarefas={setTarefas}

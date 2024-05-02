@@ -182,11 +182,6 @@ const Form = ({ editingUser, editingTarefa, fetchTarefas }) => {
       </InputArea>
 
       <Button type="submit">{isEditing ? "ATUALIZAR" : "SALVAR"}</Button>
-      {!isEditing && (
-        <Button type="button" onClick={handleSearch}>
-          PESQUISAR
-        </Button>
-      )}
     </FormContainer>
   );
 };

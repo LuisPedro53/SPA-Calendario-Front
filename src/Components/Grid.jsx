@@ -25,7 +25,6 @@ const Grid = ({ tarefas, setTarefas, setEditingTarefa }) => {
           cdTarefa: cdTarefa,
         },
       });
-      console.log(response);
 
       if (response.data.errors) {
         toast.error("Erro ao excluir tarefa!");
@@ -48,11 +47,15 @@ const Grid = ({ tarefas, setTarefas, setEditingTarefa }) => {
   };
 
   const formatarData = (data) => {
-    const dataObj = new Date(data);
-    const dia = dataObj.getDate().toString().padStart(2, "0");
-    const mes = (dataObj.getMonth() + 1).toString().padStart(2, "0");
-    const ano = dataObj.getFullYear();
-    return `${dia}/${mes}/${ano}`;
+    const partes = data.split("-");
+    const ano = parseInt(partes[0], 10);
+    const mes = parseInt(partes[1], 10) - 1;
+    const dia = parseInt(partes[2], 10);
+    const dataObj = new Date(ano, mes, dia);
+    const diaFormatado = dataObj.getDate().toString().padStart(2, "0");
+    const mesFormatado = (dataObj.getMonth() + 1).toString().padStart(2, "0");
+    const anoFormatado = dataObj.getFullYear();
+    return `${diaFormatado}/${mesFormatado}/${anoFormatado}`;
   };
 
   return (
