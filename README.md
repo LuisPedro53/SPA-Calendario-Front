@@ -1,9 +1,9 @@
-# Project EducaData
+# Projeto MyTasks
 
-Welcome !
-This is the frontend of the EducaData Project, created entirely by me. A crud where it is possible to search, delete, create and update students.
+Bem-vindo!
+Este é o frontend do Projeto MyTask, criado inteiramente por mim. Um CRUD onde é possível pesquisar, deletar, criar e atualizar tarefas.
 
-## Tecnologies Used
+## Tecnologias Usadas
 
 ![TypeScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
@@ -14,78 +14,77 @@ This is the frontend of the EducaData Project, created entirely by me. A crud wh
 
 
 
-## A Little Bit of Each Technology
+## Um Pouco de Cada Tecnologia
 
-Creating a project using the following technologies was an incredibly enriching experience:
+Criar um projeto usando as seguintes tecnologias foi uma experiência incrivelmente enriquecedora:
 
-- **JavaScript**: The dynamic and interpreted programming language brought flexibility and ease of use to the project. Its event-driven nature made user interface manipulation and interaction smooth and intuitive. This resulted in faster development and an enhanced user experience.
+- **JavaScript**: A linguagem de programação dinâmica e interpretada trouxe flexibilidade e facilidade de uso para o projeto. Sua natureza orientada a eventos tornou a manipulação e interação da interface do usuário suaves e intuitivas. Isso resultou em um desenvolvimento mais rápido e uma experiência do usuário aprimorada.
 
-- **React**: Allowed for the creation of reusable and dynamic components, making the code more organized and the user interface more interactive.
+- **React**: Permitiu a criação de componentes reutilizáveis e dinâmicos, tornando o código mais organizado e a interface do usuário mais interativa.
 
-- **React-Icons**: Incorporated a wide variety of accessible and customizable icons into the project, enhancing aesthetics and usability. The ability to import only the icons used helped keep the bundle size small, resulting in faster load times and overall better application performance.
+- **React-Icons**: Incorporou uma grande variedade de ícones acessíveis e personalizáveis ao projeto, melhorando a estética e a usabilidade. A capacidade de importar apenas os ícones usados ajudou a manter o tamanho do pacote pequeno, resultando em tempos de carregamento mais rápidos e melhor desempenho geral da aplicação.
 
-- **Styled Components**: Brought a unique approach to styling React components. This allowed style to be an integral part of the component, improving code readability and making style maintenance easier.
+- **Styled Components**: Trouxe uma abordagem única para estilizar componentes React. Isso permitiu que o estilo fosse uma parte integral do componente, melhorando a legibilidade do código e facilitando a manutenção do estilo.
 
-- **Docker**: The use of Docker in the project has streamlined the process of setting up and managing the application's development environment. By containerizing the application and its dependencies, Docker has ensured consistency across multiple development and production environments. This has led to fewer 'it works on my machine' scenarios, increased productivity, and more time spent on developing features that add value to the application.
-
-
+- **Docker**: O uso do Docker no projeto simplificou o processo de configuração e gerenciamento do ambiente de desenvolvimento da aplicação. Ao containerizar a aplicação e suas dependências, o Docker garantiu consistência em vários ambientes de desenvolvimento e produção. Isso levou a menos cenários de 'funciona na minha máquina', aumentou a produtividade e passou mais tempo desenvolvendo recursos que agregam valor à aplicação.
 
 
-## Developer
+
+
+## Desenvolvedor
 
 - Luiz Pedro Galdino Silva
 
-## Project Features
+## Recursos do Projeto
 
-1. Register
-2. Update
-3. Delete
-4. Search
+1. Registro
+2. Atualização
+3. Deletar
+4. Pesquisar
 
+## Como executar o projeto
 
-## How to run the project
+Após clonar o repositório, certifique-se de que o Docker está instalado em seu sistema. Se não, você pode baixar e instalar a partir do site oficial do Docker.
 
-After cloning the repository, make sure Docker is installed on your system. If not, you can download and install it from the official Docker website.
+Uma vez que o Docker está instalado, siga estes passos para executar o projeto:
 
-Once Docker is installed, follow these steps to run the project:
+1. Certifique-se de que o servidor (EducaData-Back) está rodando na porta 8080.
 
-1. Make sure the server (EducaData-Back) is running on port 8080.
-
-2. To check if the server is running, type in your browser: 
-
+2. Para verificar se o servidor está rodando, digite no seu navegador:
 ```
 localhost:8080/graphql
 ```
 
-3. If the graphical part of graphql appears, then the server is running correctly
+3. Se a parte gráfica do graphql aparecer, então o servidor está rodando corretamente
 
-4. Bring down any old versions of the project that might be running with the following command:
+4. Derrube quaisquer versões antigas do projeto que possam estar rodando com o seguinte comando:
 
 ```
 docker-compose down
 ```
-5. Build the Docker Compose project with the following command:
+5. Construa o projeto Docker Compose com o seguinte comando:
 
 ```
 docker-compose build
 ```
-6. Build the Docker Compose project with the following command:
+6. Construa o projeto Docker Compose com o seguinte comando:
 
 ```
 docker-compose up
 
 ```
 
-After running the above command, the server will automatically initialize and will be available at localhost:8083. If the browser does not automatically open, you will need to copy and paste this link into your browser.
+Após executar o comando acima, o servidor será inicializado automaticamente e estará disponível em localhost:8083. Se o navegador não abrir automaticamente, você precisará copiar e colar este link no seu navegador.
 
-## How to test the project
+## Como testar o projeto
 
-1. To test the project, in the root of the project, simply type the following command:
+1. Para testar o projeto, na raiz do projeto, simplesmente digite o seguinte comando:
+
 
 ```
 npx jest --env=jsdom
 ```
 
-## Conclusion
+## Conclusão
 
-In summary, each of these technologies played a vital role in the project, contributing to its success. The combination of these tools resulted in clean, efficient, and secure code. It was a valuable learning journey that will surely have a positive impact on future projects.
+Em resumo, cada uma dessas tecnologias desempenhou um papel vital no projeto, contribuindo para o seu sucesso. A combinação dessas ferramentas resultou em um código limpo, eficiente e seguro. Foi uma jornada de aprendizado valiosa que certamente terá um impacto positivo em projetos futuros.
