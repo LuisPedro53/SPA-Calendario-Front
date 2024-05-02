@@ -17,10 +17,10 @@ const Grid = ({ tarefas, setTarefas, setEditingTarefa }) => {
     try {
       const response = await axios.post("http://localhost:8080/graphql", {
         query: `
-                mutation DeleteTarefa($cdTarefa: String!) {
-                    deleteTarefa(cdTarefa: $cdTarefa)
-                }
-            `,
+          mutation DeleteTarefa($cdTarefa: String!) {
+            deleteTarefa(cdTarefa: $cdTarefa)
+          }
+        `,
         variables: {
           cdTarefa: cdTarefa,
         },
@@ -47,6 +47,14 @@ const Grid = ({ tarefas, setTarefas, setEditingTarefa }) => {
     }
   };
 
+  const formatarData = (data) => {
+    const dataObj = new Date(data);
+    const dia = dataObj.getDate().toString().padStart(2, "0");
+    const mes = (dataObj.getMonth() + 1).toString().padStart(2, "0");
+    const ano = dataObj.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  };
+
   return (
     <Table>
       <Thead>
@@ -65,8 +73,8 @@ const Grid = ({ tarefas, setTarefas, setEditingTarefa }) => {
           <Tr key={i}>
             <Td width="25%">{item.nmTitulo}</Td>
             <Td width="25%">{item.nmDescricao}</Td>
-            <Td width="15%">{item.dtTarefa}</Td>
-            <Td width="15%">{item.horaTarefa}</Td>
+            <Td width="15%">{formatarData(item.dtTarefa)}</Td>
+            <Td width="15%">{item.horaTarefa.substring(0, 5)}</Td>
             <Td width="10%">{item.tempoTarefa}</Td>
             <Td style={{ textAlign: "center" }} width="5%">
               <ActionIconWrapper>
