@@ -3,16 +3,18 @@ import { FormContainer, InputArea, Input, Label, Button } from "../Styles/Form";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const Form = ({ editingUser, editingTarefa, fetchUsers }) => {
+const Form = ({ editingUser, editingTarefa, fetchTarefas }) => {
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [data, setData] = useState("");
   const [hora, setHora] = useState("");
   const [tempo, setTempo] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [tarefas, setTarefas] = useState("");
 
   useEffect(() => {
     if (editingTarefa) {
+      setTarefas(editingTarefa.cdTarefa);
       setTitulo(editingTarefa.nmTitulo);
       setDescricao(editingTarefa.nmDescricao);
       setData(editingTarefa.dtTarefa);
@@ -43,7 +45,7 @@ const Form = ({ editingUser, editingTarefa, fetchUsers }) => {
       });
 
       toast.success("Tarefa criada com sucesso!");
-      // fetchUsers();
+      fetchTarefas();
     } catch (error) {
       console.error("Erro ao criar tarefa:", error);
       toast.error("Erro ao criar tarefa!");
@@ -54,22 +56,36 @@ const Form = ({ editingUser, editingTarefa, fetchUsers }) => {
     try {
       const response = await axios.post("http://localhost:8080/graphql", {
         query: `
-          mutation UpdateTarefa($cdTarefa: String!, $nmTitulo: String, $nmDescricao: String, $dtTarefa: Date, $horaTarefa: Time, $tempoTarefa: Int) {
-            updateTarefa(cdTarefa: $cdTarefa, nmTitulo: $nmTitulo, nmDescricao: $nmDescricao, dtTarefa: $dtTarefa, horaTarefa: $horaTarefa, tempoTarefa: $tempoTarefa) {
-              cdTarefa
-              nmTitulo
-              nmDescricao
-              dtTarefa
-              horaTarefa
-              tempoTarefa
-            }
+        mutation UpdateTarefa(
+          $cdTarefa: String!,
+          $nmTitulo: String,
+          $nmDescricao: String,
+          $dtTarefa: Date,
+          $horaTarefa: Time,
+          $tempoTarefa: Int
+        ) {
+          updateTarefa(
+            cdTarefa: $cdTarefa,
+            nmTitulo: $nmTitulo,
+            nmDescricao: $nmDescricao,
+            dtTarefa: $dtTarefa,
+            horaTarefa: $horaTarefa,
+            tempoTarefa: $tempoTarefa
+          ) {
+            cdTarefa
+            nmTitulo
+            nmDescricao
+            dtTarefa
+            horaTarefa
+            tempoTarefa
           }
-        `,
+        }
+      `,
         variables: tarefa,
       });
 
       toast.success("Tarefa atualizada com sucesso!");
-      fetchUsers();
+      fetchTarefas();
     } catch (error) {
       console.error("Erro ao atualizar tarefa:", error);
       toast.error("Erro ao atualizar tarefa!");
@@ -77,13 +93,13 @@ const Form = ({ editingUser, editingTarefa, fetchUsers }) => {
   };
 
   const handleSearch = () => {
-    fetchUsers(titulo.trim(), descricao.trim(), data, hora, tempo);
+    fetchTarefas(titulo.trim());
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const tarefa = {
+    let tarefa = {
       nmTitulo: titulo.trim(),
       nmDescricao: descricao.trim(),
       dtTarefa: data,
@@ -96,7 +112,7 @@ const Form = ({ editingUser, editingTarefa, fetchUsers }) => {
     }
 
     if (isEditing) {
-      tarefa.cdTarefa = editingUser.cdTarefa;
+      tarefa = { ...tarefa, cdTarefa: tarefas };
       handleUpdate(tarefa);
     } else {
       handleCreate(tarefa);
