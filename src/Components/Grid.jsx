@@ -12,36 +12,38 @@ import {
   ActionIconWrapper,
 } from "../Styles/Grid";
 
-const Grid = ({ users, setUsers, setEditingUser }) => {
-  const handleDelete = async (cdAluno) => {
+const Grid = ({ tarefas, setTarefas, setEditingTarefa }) => {
+  const handleDelete = async (cdTarefa) => {
     try {
       const response = await axios.post("http://localhost:8080/graphql", {
         query: `
-                mutation DeleteAluno($cdAluno: String!) {
-                    deleteAluno(cdAluno: $cdAluno)
+                mutation DeleteTarefa($cdTarefa: String!) {
+                    deleteTarefa(cdTarefa: $cdTarefa)
                 }
             `,
         variables: {
-          cdAluno: cdAluno,
+          cdTarefa: cdTarefa,
         },
       });
-      console.log(response); 
+      console.log(response);
 
       if (response.data.errors) {
-        toast.error("Erro ao excluir aluno!");
+        toast.error("Erro ao excluir tarefa!");
         return;
       }
 
-      if (response.data.data && response.data.data.deleteAluno) {
-        const newArray = users.filter((user) => user.cdAluno !== cdAluno);
-        setUsers(newArray);
-        toast.success("Aluno excluído com sucesso!");
+      if (response.data.data && response.data.data.deleteTarefa) {
+        const newArray = tarefas.filter(
+          (tarefa) => tarefa.cdTarefa !== cdTarefa
+        );
+        setTarefas(newArray);
+        toast.success("Tarefa excluída com sucesso!");
       } else {
-        toast.error("Falha ao excluir aluno!");
+        toast.error("Falha ao excluir tarefa!");
       }
     } catch (error) {
-      console.error("Erro ao excluir aluno:", error);
-      toast.error("Erro ao excluir aluno!");
+      console.error("Erro ao excluir tarefa:", error);
+      toast.error("Erro ao excluir tarefa!");
     }
   };
 
@@ -49,29 +51,33 @@ const Grid = ({ users, setUsers, setEditingUser }) => {
     <Table>
       <Thead>
         <Tr>
-          <Th>Nome</Th>
-          <Th>Email</Th>
-          <Th>CPF</Th>
+          <Th>Título</Th>
+          <Th>Descrição</Th>
+          <Th>Data</Th>
+          <Th>Hora</Th>
+          <Th>Tempo</Th>
           <Th></Th>
           <Th></Th>
         </Tr>
       </Thead>
       <Tbody>
-        {users.map((item, i) => (
+        {tarefas.map((item, i) => (
           <Tr key={i}>
-            <Td width="50%">{item.nmAluno}</Td>
-            <Td width="50%">{item.emailAluno}</Td>
-            <Td width="50%">{item.cpfAluno}</Td>
+            <Td width="25%">{item.nmTitulo}</Td>
+            <Td width="25%">{item.nmDescricao}</Td>
+            <Td width="15%">{item.dtTarefa}</Td>
+            <Td width="15%">{item.horaTarefa}</Td>
+            <Td width="10%">{item.tempoTarefa}</Td>
             <Td style={{ textAlign: "center" }} width="5%">
               <ActionIconWrapper>
-                <FaEdit onClick={() => setEditingUser(item)} />
+                <FaEdit onClick={() => setEditingTarefa(item)} />
               </ActionIconWrapper>
             </Td>
             <Td style={{ textAlign: "center" }} width="5%">
               <ActionIconWrapper>
                 <FaTrash
                   data-testid="delete-icon"
-                  onClick={() => handleDelete(item.cdAluno)}
+                  onClick={() => handleDelete(item.cdTarefa)}
                 />
               </ActionIconWrapper>
             </Td>

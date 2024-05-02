@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FormContainer, InputArea, Input, Label, Button } from "../Styles/Form";
 import { toast } from "react-toastify";
 import axios from "axios";
-import InputMask from "react-input-mask";
 
 const Form = ({ editingUser, setEditingUser, fetchUsers }) => {
   const [titulo, setTitulo] = useState("");

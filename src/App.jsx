@@ -8,64 +8,51 @@ import { useState, useEffect } from "react";
 import { Container, Title } from "./Styles/App.js";
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [ondEdit, setOndEdit] = useState(null);
+  const [tarefas, setTarefas] = useState([]);
+  const [editingTarefa, setEditingTarefa] = useState(null);
 
-  const [editingUser, setEditingUser] = useState(null);
-
-  const fetchUsers = async (
-    nmAluno = null,
-    cpfAluno = null,
-    emailAluno = null
-  ) => {
+  const fetchTarefas = async (nmTitulo = null, dtTarefa = null) => {
     try {
       const response = await axios.post("http://localhost:8080/graphql", {
         query: `
-        query GetAlunos($nmAluno: String, $cpfAluno: String, $emailAluno: String) {
-          alunos(nmAluno: $nmAluno, cpfAluno: $cpfAluno, emailAluno: $emailAluno) {
-            cdAluno
-            nmAluno
-            emailAluno
-            cpfAluno
+        query GetTarefas($nmTitulo: String) {
+          tarefas(nmTitulo: $nmTitulo) {
+            cdTarefa
+            nmTitulo
+            nmDescricao
+            dtTarefa
+            horaTarefa
+            tempoTarefa
           }
-        }
+          }
       `,
         variables: {
-          nmAluno,
-          cpfAluno,
-          emailAluno,
+          nmTitulo,
         },
       });
-      setUsers(response.data.data.alunos);
+      setTarefas(response.data.data.tarefas);
     } catch (error) {
-      toast.error("Erro ao carregar alunos");
+      toast.error("Erro ao carregar as tarefas");
     }
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchTarefas();
   }, []);
-
-  <Form
-    editingUser={editingUser}
-    setEditingUser={setEditingUser}
-    fetchUsers={fetchUsers}
-  />;
 
   return (
     <>
       <Container>
-        <Title>Alunos</Title>
+        <Title>Tarefas</Title>
         <Form
-          editingUser={editingUser}
-          setEditingUser={setEditingUser}
-          fetchUsers={fetchUsers}
+          editingTarefa={editingTarefa}
+          setEditingTarefa={setEditingTarefa}
+          fetchTarefas={fetchTarefas}
         />
-
         <Grid
-          users={users}
-          setUsers={setUsers}
-          setEditingUser={setEditingUser}
+          tarefas={tarefas}
+          setTarefas={setTarefas}
+          setEditingTarefa={setEditingTarefa}
         />
       </Container>
       <ToastContainer />
