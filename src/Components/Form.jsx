@@ -3,7 +3,7 @@ import { FormContainer, InputArea, Input, Label, Button } from "../Styles/Form";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const Form = ({ editingUser, setEditingUser, fetchUsers }) => {
+const Form = ({ editingUser, editingTarefa, fetchUsers }) => {
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [data, setData] = useState("");
@@ -12,17 +12,17 @@ const Form = ({ editingUser, setEditingUser, fetchUsers }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    if (editingUser) {
-      setTitulo(editingUser.nmTitulo);
-      setDescricao(editingUser.nmDescricao);
-      setData(editingUser.dtTarefa);
-      setHora(editingUser.horaTarefa);
-      setTempo(editingUser.tempoTarefa);
+    if (editingTarefa) {
+      setTitulo(editingTarefa.nmTitulo);
+      setDescricao(editingTarefa.nmDescricao);
+      setData(editingTarefa.dtTarefa);
+      setHora(editingTarefa.horaTarefa);
+      setTempo(editingTarefa.tempoTarefa);
       setIsEditing(true);
     } else {
       setIsEditing(false);
     }
-  }, [editingUser]);
+  }, [editingTarefa]);
 
   const handleCreate = async (tarefa) => {
     try {

@@ -11,7 +11,7 @@ function App() {
   const [tarefas, setTarefas] = useState([]);
   const [editingTarefa, setEditingTarefa] = useState(null);
 
-  const fetchTarefas = async (nmTitulo = null, dtTarefa = null) => {
+  const fetchTarefas = async (nmTitulo = null) => {
     try {
       const response = await axios.post("http://localhost:8080/graphql", {
         query: `

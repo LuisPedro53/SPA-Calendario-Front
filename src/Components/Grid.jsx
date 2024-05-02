@@ -74,11 +74,15 @@ const Grid = ({ tarefas, setTarefas, setEditingTarefa }) => {
             <Td width="25%">{item.nmTitulo}</Td>
             <Td width="25%">{item.nmDescricao}</Td>
             <Td width="15%">{formatarData(item.dtTarefa)}</Td>
-            <Td width="15%">{item.horaTarefa.substring(0, 5)}</Td>
+            <Td width="15%">{item.horaTarefa}</Td>
             <Td width="10%">{item.tempoTarefa}</Td>
             <Td style={{ textAlign: "center" }} width="5%">
               <ActionIconWrapper>
-                <FaEdit onClick={() => setEditingTarefa(item)} />
+                <FaEdit
+                  onClick={() => {
+                    setEditingTarefa(item);
+                  }}
+                />
               </ActionIconWrapper>
             </Td>
             <Td style={{ textAlign: "center" }} width="5%">
